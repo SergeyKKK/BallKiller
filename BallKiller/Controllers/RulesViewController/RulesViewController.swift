@@ -6,13 +6,17 @@
 //
 
 import UIKit
+import SnapKit
 
 final class RulesViewController: UIViewController {
   
   //MARK: - Properties
   
   private lazy var titleLabel = UILabel()
+  private lazy var closeButton = UIButton()
   private lazy var roolsTextView = UITextView()
+  
+  private let paragraphStyle = NSMutableParagraphStyle()
   
   //MARK: - Life circle
   
@@ -28,6 +32,7 @@ final class RulesViewController: UIViewController {
     view.backgroundColor = .white
     
     setupTitleLabel(titleLabel)
+    setupCloseButton(closeButton)
     setupRoolsTextView(roolsTextView)
   }
   
@@ -43,11 +48,29 @@ final class RulesViewController: UIViewController {
     }
   }
   
+  private func setupCloseButton(_ button: UIButton) {
+    button.setImage(.cardClose, for: .normal)
+    button.addTarget(
+      self,
+      action: #selector(closeCardAction),
+      for: .touchUpInside
+    )
+    view.addSubview(button)
+    button.snp.makeConstraints { make in
+      make.top.equalTo(20)
+      make.trailing.equalTo(-10)
+      make.height.equalTo(50)
+    }
+  }
+  
+  
   private func setupRoolsTextView(_ textView: UITextView) {
-    textView.text = .allRules
-    textView.font = .systemFont(ofSize: 15, weight: .semibold)
     textView.isEditable = false
     textView.showsVerticalScrollIndicator = false
+    paragraphStyle.lineSpacing = 15
+    let attributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.paragraphStyle: paragraphStyle]
+    let attributedString = NSAttributedString(string: .allRules, attributes: attributes)
+    textView.attributedText = attributedString
     view.addSubview(textView)
     textView.snp.makeConstraints { make in
       make.leading.equalTo(10)
@@ -55,6 +78,12 @@ final class RulesViewController: UIViewController {
       make.top.equalTo(titleLabel.snp.bottom).offset(10)
       make.bottom.equalTo(-10)
     }
+  }
+  
+  //MARK: - Actions
+  
+  @objc private func closeCardAction() {
+    dismiss(animated: true)
   }
 }
 

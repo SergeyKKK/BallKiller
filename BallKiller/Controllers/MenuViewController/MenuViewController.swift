@@ -75,14 +75,29 @@ final class MenuViewController: UIViewController {
   //MARK: - Actions
   
   @objc private func startPlayAction() {
-    let playgroundViewController = PlaygroundViewController()
-    playgroundViewController.modalPresentationStyle = .fullScreen
-    present(playgroundViewController, animated: true)
+    let levelViewController = LevelViewController()
+    levelViewController.modalPresentationStyle = .custom
+    levelViewController.transitioningDelegate = self
+    present(levelViewController, animated: true)
   }
   
   @objc private func showRulesAction() {
     let rulesViewController = RulesViewController()
+    rulesViewController.modalPresentationStyle = .custom
+    rulesViewController.transitioningDelegate = self
     present(rulesViewController, animated: true)
+  }
+}
+
+//MARK: - Extension
+
+extension MenuViewController: UIViewControllerTransitioningDelegate {
+  func presentationController(
+    forPresented presented: UIViewController,
+    presenting: UIViewController?,
+    source: UIViewController
+  ) -> UIPresentationController? {
+    PresentationController(presentedViewController: presented, presenting: presenting)
   }
 }
 
